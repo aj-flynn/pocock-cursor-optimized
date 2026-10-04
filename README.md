@@ -4,11 +4,27 @@ This repository adapts the skills from [mattpocock/skills](https://github.com/ma
 
 The original skill text stays under his MIT copyright notice, which the license requires us to keep. The adaptations are also MIT and are not attributed to him. See [LICENSE](LICENSE).
 
-Opening this repo loads the skills from `.cursor/skills/`. To use them in another project, copy them in:
+Opening this repo loads the skills from `.cursor/skills/`. To use them in another project, copy them in.
+
+From PowerShell:
+
+```powershell
+.\scripts\install.ps1 C:\path\to\your\project
+```
+
+If PowerShell refuses to run the script, use:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 C:\path\to\your\project
+```
+
+From macOS, Linux, or Git Bash:
 
 ```bash
-/path/to/this-repo/scripts/install.sh /path/to/your/project
+./scripts/install.sh /path/to/your/project
 ```
+
+In PowerShell, `./scripts/install.sh` opens the file. `install.ps1` does the copy.
 
 The script copies each skill this repo owns into `<project>/.cursor/skills/` and copies `.cursor/rules/engineering-session.mdc` into `<project>/.cursor/rules/`. Other skills and rules already in that project stay put. A refresh replaces the skill folders this repo owns, including files added inside those folders. Run it again after pulling this repo to refresh the copy. It will not install into this repo.
 

@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Copy this repo's Cursor skills and the engineering-session rule into another project.
+# Windows PowerShell opens this file instead of running it. Use scripts/install.ps1 there.
 set -euo pipefail
 
 usage() {
   echo "Usage: scripts/install.sh <project>" >&2
+  echo "Windows PowerShell: .\\scripts\\install.ps1 <project>" >&2
   echo "Copy these skills into <project>/.cursor/skills and the engineering-session rule into <project>/.cursor/rules." >&2
   exit 2
 }
