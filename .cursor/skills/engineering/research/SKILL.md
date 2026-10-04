@@ -3,7 +3,9 @@ name: research
 description: Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent.
 ---
 
-Dispatch a background Cursor Task subagent to do the research, so you keep working while it reads (see HARNESS.md beside the engineering skill). Put this skill's job list and the question in its prompt.
+If `.scratch/engineering/session.md` Notes already name an output path for this question, read that note and do not dispatch again.
+
+Otherwise dispatch one background Cursor Task subagent (`generalPurpose`) so you keep working while it reads (see `.cursor/skills/engineering/HARNESS.md`). The prompt must include this skill's job list, the question, and the absolute path of this SKILL.md. When the session file is active, record the output path in Notes before you reply.
 
 Its job:
 

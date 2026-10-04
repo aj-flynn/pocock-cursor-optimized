@@ -8,7 +8,7 @@ Opening this repo loads the skills from `.cursor/skills/`. To use them in anothe
 /path/to/this-repo/scripts/install.sh /path/to/your/project
 ```
 
-The script copies each skill this repo owns into `<project>/.cursor/skills/` and copies `.cursor/rules/engineering-session.mdc` into `<project>/.cursor/rules/`. Other skills and rules already in that project stay put. Run it again after pulling this repo to refresh the copy. It will not install into this repo.
+The script copies each skill this repo owns into `<project>/.cursor/skills/` and copies `.cursor/rules/engineering-session.mdc` into `<project>/.cursor/rules/`. Other skills and rules already in that project stay put. A refresh replaces the skill folders this repo owns, including files added inside those folders. Run it again after pulling this repo to refresh the copy. It will not install into this repo.
 
 If the target has a `.gitignore` and does not already ignore `.scratch`, the script appends `.scratch/`. The engineering session file lives there and should stay uncommitted.
 
@@ -21,7 +21,7 @@ Grilling and the other multi-turn skills have to stay in context after you answe
 
 The badge says **engineering**. You can also type `/engineering` once without Custom Mode. The always-on rule re-enters the skill on later turns while `.scratch/engineering/session.md` has `status: active`.
 
-While the session is grilling and you have not confirmed a shared understanding, the agent does not edit product code. It may update `GLOSSARY.md` and ADRs. Say you want to implement, or that you are done, and it leaves that gate. Say you are leaving engineering and it sets `status: closed`.
+The grill gate applies only while the session phase is grilling. Triage, teaching, wayfinder, and diagnosing a bug are not under it. During a grill the agent does not edit production code. It may update `GLOSSARY.md`, ADRs, and a throwaway prototype. Naming another skill, or confirming a shared understanding and asking to build, leaves the gate. A phase boundary that discards context sets `status: closed` first, so the next chat does not reload the old design tree. Say you are leaving engineering and it sets `status: closed` too.
 
 The other skills stay available as `/grill-me`, `/tdd`, and the rest. Custom Mode is what keeps a loop alive across turns. [ask-matt](.cursor/skills/engineering/ask-matt/SKILL.md) is the router for which skill to use.
 

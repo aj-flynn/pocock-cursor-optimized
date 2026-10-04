@@ -4,17 +4,17 @@ A **phase** is a chunk of work inside a session: the grilling, the implementatio
 
 The **phase boundary** is the gap between two phases, and it is the only place this decision belongs. Mid-phase there is no decision to make: continue, or split the work that's left into Task subagents. Starting a new chat mid-phase makes the agent lose the thread.
 
-Cursor has no `/clear` and no `/compact`. A new chat, a handoff file, and `.scratch/engineering/session.md` are the moves that replace them. The session file is what survives a new chat. See HARNESS.md beside the engineering skill.
+Cursor has no `/clear` and no `/compact`. A new chat and a handoff file replace them. See `.cursor/skills/engineering/HARNESS.md`. The engineering session file keeps a grill alive across turns of the same effort. A discard sets its `status` to `closed` first, so the next chat does not reload it.
 
 ## The five options
 
 | Option | What it does |
 | --- | --- |
 | **Continue** | Stay in the session. No context switch at all. |
-| **New chat** | Empty the context window and start from nothing. Close the engineering session file first if the next chat should not resume it. The old chat stays in history. |
+| **New chat** | Empty the context window and start from nothing. Set the engineering session `status` to `closed` first. The next chat must not reload it. The old chat stays in history. |
 | **`/handoff`** | Write a portable markdown file and seed a session anywhere with it. |
 | **Task subagent** | Send the task to its own context window and get a report back. |
-| **Handoff into a new chat** | Write what the next phase must keep, then start a new chat from that file. |
+| **Handoff into a new chat** | Write what the next phase must keep, set the engineering session to `closed`, then start a new chat from that file only. |
 
 ## The tree
 
@@ -22,7 +22,7 @@ Work top to bottom at the boundary. The first **yes** wins.
 
 **1. Can you continue in this session?** Two things make the answer yes: the next phase needs this phase as a **primary source**, or you have enough [smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone) left (~150k tokens) for the next phase to fit. Grilling to implementation is the standard yes: the implementation wants the reasoning verbatim, not a summary of it. Continue costs nothing and loses nothing, so rule it out before anything else.
 
-**2. Is the context irrelevant to what comes next?** Is everything in this session (the exploration, the decisions, the dead ends) disposable? If so, start a **new chat**. It is the cheapest move on the board: it takes no time and hands back the whole window. It also isn't terminal: the old chat stays in history.
+**2. Is the context irrelevant to what comes next?** Is everything in this session (the exploration, the decisions, the dead ends) disposable? If so, start a **new chat**, and set the engineering session `status` to `closed` before you do. It is the cheapest move on the board: it takes no time and hands back the whole window. It also isn't terminal: the old chat stays in history. The next chat must not reload the session file.
 
 The cost of getting this wrong is one-way. Leave a *relevant* context behind and you lose the **why** behind what you built, and no amount of reading the diff back gets it returned.
 
@@ -37,7 +37,7 @@ That list is the whole clause. What `/handoff` buys is **portability**: a file t
 
 **4. Can the task be done AFK?** Is it scoped tightly enough to run with you away from the keyboard, no steering? Then send it to a **Task subagent** and leave this session untouched. Automated review is the standard case: the agent reads the diff and reports, and you aren't needed while it does.
 
-**5. Otherwise, hand off into a new chat.** Relevant context, same harness, same directory, and you need to stay in the loop: this is where the tree lands, and it lands here often. Tell the handoff what the next phase is for ("we're going to QA this area") so the file keeps what that phase needs.
+**5. Otherwise, hand off into a new chat.** Relevant context, same harness, same directory, and you need to stay in the loop: this is where the tree lands, and it lands here often. Tell the handoff what the next phase is for ("we're going to QA this area") so the file keeps what that phase needs. Set the engineering session `status` to `closed` before the new chat. The handoff is the seed. The session file is not.
 
 A handoff into a new chat is the **default, not the first reach**. It sits at the bottom because the four questions above it are all cheaper or more precise. The failure mode when people start here is a fresh session that is confidently wrong about a decision the summary flattened.
 

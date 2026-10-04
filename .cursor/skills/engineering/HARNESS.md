@@ -6,20 +6,26 @@ This is the Claude Code to Cursor map for these skills. The same text ships with
 
 Cursor has no Skill tool. A slash name in prose does not load a skill on later turns.
 
-To run a skill, find the folder under `.cursor/skills/` whose `SKILL.md` frontmatter `name` matches, read that file, and carry out its instructions. Two skills means two reads, one skill each. Do this again at the start of each later turn while that skill is still active.
+To run a model-invoked skill, find the folder under `.cursor/skills/` whose `SKILL.md` frontmatter `name` matches, read that file, and carry out its instructions. Two skills means two reads, one skill each.
 
-A user-invoked skill (`disable-model-invocation: true`) is for the human to start. Tell them to run it. Do not read it on their behalf, except `setup-matt-pocock-skills`, which the human runs once per repo.
+A user-invoked skill (`disable-model-invocation: true`) is started by the human. Do not open it because another skill named it. Two exceptions:
+
+- The human already listed it in `.scratch/engineering/session.md` under `active_skills`. Re-read that `SKILL.md` every turn of the same effort. That is the same invocation, not a new one.
+- Tell the human to run `setup-matt-pocock-skills` once per repo. Do not run it yourself.
+
+`handoff` is user-invoked. When work must travel, tell the human to run it.
 
 ## Task subagents
 
 Where a skill says to dispatch a sub-agent, use Cursor's Task tool.
 
-- Read-only fact-finding: `subagent_type` `explore`.
+- Fact-finding that only reads the repo: `subagent_type` `explore`.
+- Fact-finding that must run commands or write files, including grilling's environment facts and implement-spec's notes: `subagent_type` `generalPurpose`.
 - Implementation, review, research, and design: `subagent_type` `generalPurpose`.
-- The subagent does not see this conversation. Put the full brief in its prompt, including the path of any `SKILL.md` it must follow.
-- Set `run_in_background` when this session should keep working. Research and implement-spec implementers are the usual case.
+- The subagent does not see this conversation. The prompt must include the question, the absolute path of each `SKILL.md` it should follow, the ticket or spec path, the branch, and the worktree path when there is one.
+- Set `run_in_background` when this session should keep working. Research and implement-spec implementers are the usual case. If `.scratch/engineering/session.md` Notes already name an output path for that same question, do not dispatch another one.
 - Parallel reviews and design-it-twice alternatives are separate Task calls in one turn.
-- Implement-spec uses one Task per ready ticket. When the environment supports git worktrees, one worktree per ticket. Otherwise one branch at a time, and serialize the merges.
+- Implement-spec: before each Task, create one git worktree per ready ticket with `git worktree add`. Launch one background Task per ticket, and tell it to edit only that worktree. Do not serialize the frontier onto one branch.
 
 ## Questions
 
@@ -30,12 +36,12 @@ Ask in the skill's own format and wait for the next user message. Grilling uses 
 There is no `/clear` and no `/compact`.
 
 - Continue when the next phase needs this conversation as a primary source.
-- Start a new chat when the current context is disposable. Close `.scratch/engineering/session.md` first if the next chat should not resume engineering mode. The old chat stays in history.
-- Read and follow the `handoff` skill when the work must travel: a new directory, a colleague, or a side task forked mid-phase.
+- A new chat that discards context: set `.scratch/engineering/session.md` `status` to `closed` first. The next chat starts from nothing and must not reload that file. The old chat stays in history.
+- When work must travel (a new directory, a colleague, or a side task forked mid-phase), tell the human to run `/handoff`.
 - Use a Task subagent when the task can run without the user.
-- Otherwise write a handoff that says what the next phase must keep, and start a new chat from that file. That is the lossy default, not the first reach.
+- Otherwise write a handoff that says what the next phase must keep, set the engineering session `status` to `closed`, and start a new chat from that file only. That is the lossy default, not the first reach.
 
-The engineering session file is what survives a new chat. Conversation memory is not.
+While `status` stays `active`, the session file is the design tree across turns of the same effort. It is not a stand-in for a context you meant to discard.
 
 ## Steering files
 
@@ -43,4 +49,4 @@ The engineering session file is what survives a new chat. Conversation memory is
 
 ## What stays the same
 
-`disable-model-invocation: true` still means the human must invoke the skill. These skills do not use Claude-only frontmatter (`context: fork`, `allowed-tools`, `hooks`, shell injection). Custom Mode cannot lock tools the way Plan mode can. The engineering skill's grill gate is an instruction: no product edits until understanding is confirmed. `GLOSSARY.md` and ADRs are allowed during that gate.
+`disable-model-invocation: true` still means the human must start the skill. Re-reading a skill already listed in an active engineering session is persistence, not a second start. These skills do not use Claude-only frontmatter (`context: fork`, `allowed-tools`, `hooks`, `argument-hint`, shell injection). Custom Mode cannot lock tools the way Plan mode can. The grill gate applies only while the engineering session `phase` is `grilling`. It forbids production edits until the user confirms a shared understanding. `GLOSSARY.md`, ADRs, and a throwaway prototype are allowed during that gate. Other skills are not under it.

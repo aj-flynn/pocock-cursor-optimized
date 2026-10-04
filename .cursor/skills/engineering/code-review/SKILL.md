@@ -8,7 +8,7 @@ Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
 - **Standards**: does the code conform to this repo's documented coding standards?
 - **Spec**: does the code faithfully implement the originating issue / spec?
 
-Both axes run as **parallel Cursor Task subagents** (see HARNESS.md beside the engineering skill) so they don't pollute each other's context, then this skill aggregates their findings.
+Both axes run as **parallel Cursor Task subagents** (see .cursor/skills/engineering/HARNESS.md) so they don't pollute each other's context, then this skill aggregates their findings.
 
 The issue tracker should have been provided to you. If `docs/agents/issue-tracker.md` is missing, tell the user to run `/setup-matt-pocock-skills`.
 

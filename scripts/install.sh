@@ -17,8 +17,8 @@ if [[ ! -d "$1" ]]; then
   exit 1
 fi
 
-SOURCE_ROOT=$(cd "$(dirname "$0")/.." && pwd)
-TARGET=$(cd "$1" && pwd)
+SOURCE_ROOT=$(cd "$(dirname "$0")/.." && pwd -P)
+TARGET=$(cd "$1" && pwd -P)
 
 if [[ "$SOURCE_ROOT" == "$TARGET" ]]; then
   echo "Refusing to install into this repo. The skills already live in .cursor/ here." >&2
@@ -32,21 +32,25 @@ case "$TARGET/" in
     ;;
 esac
 
-case "$SOURCE_ROOT/" in
-  "$TARGET/"*)
-    echo "Refusing to install into a directory that contains this repo." >&2
-    exit 1
-    ;;
-esac
-
 SRC_SKILLS="$SOURCE_ROOT/.cursor/skills"
 DEST_SKILLS="$TARGET/.cursor/skills"
 mkdir -p "$DEST_SKILLS"
+
+same_dir() {
+  local left right
+  left=$(stat -c '%d:%i' "$1")
+  right=$(stat -c '%d:%i' "$2")
+  [[ "$left" == "$right" ]]
+}
 
 install_leaf() {
   local src_dir="$1"
   local rel="${src_dir#"$SRC_SKILLS"/}"
   local dest="$DEST_SKILLS/$rel"
+  if [[ -e "$dest" ]] && same_dir "$src_dir" "$dest"; then
+    echo "Refusing to replace $dest because it is the source directory." >&2
+    exit 1
+  fi
   rm -rf "$dest"
   mkdir -p "$(dirname "$dest")"
   cp -a "$src_dir" "$dest"

@@ -41,7 +41,7 @@ MODEL_INVOKED = {
     "writing-for-agents",
 }
 
-FORBIDDEN = ("Skill tool", "/compact", "/clear")
+FORBIDDEN = ("Skill tool", "/compact", "/clear", "beside the engineering skill", "argument-hint")
 
 
 def frontmatter(text: str, path: Path) -> tuple[dict[str, str], str]:
@@ -84,9 +84,10 @@ def main() -> int:
             errors.append(f"{path}: icon and color belong only on the engineering skill")
         if name == "engineering" and (data.get("icon") != "code" or data.get("color") != "orange"):
             errors.append(f"{path}: engineering mode badge must be icon code and color orange")
+        raw_front = path.read_text().split("\n---\n", 1)[0]
         for token in FORBIDDEN:
-            if token in body:
-                errors.append(f"{path}: body still contains {token!r}")
+            if token in body or token in raw_front:
+                errors.append(f"{path}: still contains {token!r}")
 
     expected = USER_INVOKED | MODEL_INVOKED
     missing = expected - found

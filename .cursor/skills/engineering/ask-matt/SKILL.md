@@ -25,7 +25,7 @@ The route most work travels. You have an idea and want it built.
    - **`/handoff`** back what you learned, and reference it from the original idea thread.
 3. **Branch: is this a multi-session build?**
    - **Yes** → **`/to-spec`** (turn the thread into a spec), then **`/to-tickets`** to split it into tracer-bullet tickets, each declaring its **blocking edges**. Then work the tickets one of two ways:
-     - **`/implement`** per ticket, **starting a new chat between each one**. On a local tracker that's one file per ticket under `.scratch/<feature>/issues/`, worked blockers-first by hand; on a real tracker the edges become native blocking links, so any ticket whose blockers are done can be grabbed. Each ticket is self-contained, so the last one's context is disposable.
+     - **`/implement`** per ticket, **starting a new chat between each one**. Set `.scratch/engineering/session.md` to `closed` first, so the next chat does not reload the previous ticket. On a local tracker that's one file per ticket under `.scratch/<feature>/issues/`, worked blockers-first by hand; on a real tracker the edges become native blocking links, so any ticket whose blockers are done can be grabbed. Each ticket is self-contained, so the last one's context is disposable.
      - **`/implement-spec`** for the whole spec in one run. It reads the tickets as a **task graph**, runs implementer subagents across the ready **frontier** in parallel, and lands everything on one **integration branch**. Reach for it when you'd rather orchestrate the build than drive each ticket yourself.
    - **No** → **`/implement`** right here, in the same context window.
 
@@ -37,9 +37,9 @@ The route most work travels. You have an idea and want it built.
 
 ### Context hygiene
 
-Keep steps 1–3 in **one unbroken chat** (do not start a new chat until after `/to-tickets`) so the grilling, spec, and tickets all build on the same thinking. Each `/implement` then starts a new chat, working from the ticket. Run `/retro` in the session it's looking back on, before that new chat; afterwards, point it at that session's transcript instead.
+Keep steps 1–3 in **one unbroken chat** (do not start a new chat until after `/to-tickets`) so the grilling, spec, and tickets all build on the same thinking. Each `/implement` then starts a new chat, working from the ticket, after the engineering session is set to `closed`. Run `/retro` in the session it's looking back on, before that new chat; afterwards, point it at that session's transcript or handoff.
 
-The limit on this is the **[smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone)**: the window (~150k tokens on state-of-the-art models) within which the model still reasons sharply. If a session approaches it before `/to-tickets`, don't push on degraded; at the nearest phase boundary, write a handoff for the next phase and start a new chat (see Phase boundaries).
+The limit on this is the **[smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone)**: the window (~150k tokens on state-of-the-art models) within which the model still reasons sharply. If a session approaches it before `/to-tickets`, don't push on degraded; at the nearest phase boundary, write a handoff, set the engineering session to `closed`, and start a new chat from that file (see Phase boundaries).
 
 ## On-ramps
 
@@ -73,10 +73,10 @@ Two model-invoked references that run *beneath* the other skills, each the singl
 A **phase** is a chunk of work inside a session: the grilling, the implementation, the QA. At the **boundary** between two of them you have five options, and picking between them is the fuzziest decision in this whole map:
 
 - **Continue**: stay put. Costs nothing, loses nothing.
-- **New chat**: empty the window, when nothing here matters to what's next. Close `.scratch/engineering/session.md` first if the next chat should not resume engineering mode. The old chat stays in history.
-- **`/handoff`** writes a portable markdown file. Narrow: only for a **new harness**, a **new directory**, a **colleague**, or forking a side task **mid-phase**. What it buys is portability.
-- **Task subagent**: send a tightly-scoped task to its own window and get a report back (see HARNESS.md beside the engineering skill).
-- **Handoff into a new chat**: write what the next phase must keep, then start a new chat from that file. The **default**, at the bottom of the tree rather than the first reach. The engineering session file is what survives.
+- **New chat**: empty the window, when nothing here matters to what's next. Set `.scratch/engineering/session.md` `status` to `closed` first. The next chat must not reload it. The old chat stays in history.
+- **`/handoff`** writes a portable markdown file. Narrow: only for a **new harness**, a **new directory**, a **colleague**, or forking a side task **mid-phase**. What it buys is portability. The human runs it.
+- **Task subagent**: send a tightly-scoped task to its own window and get a report back (see `.cursor/skills/engineering/HARNESS.md`).
+- **Handoff into a new chat**: write what the next phase must keep, set the engineering session to `closed`, then start a new chat from that file only. The **default**, at the bottom of the tree rather than the first reach.
 
 Read [PHASE-BOUNDARIES.md](PHASE-BOUNDARIES.md) for the ordered tree: the five questions, the reasoning behind each branch, and why the primary-source cost makes **Continue** the one to rule out first. Make the decision **at** a boundary; mid-phase, continue or split the rest into subagents.
 

@@ -24,7 +24,7 @@ This command is _informed_ by the project's domain model and built on a shared d
 
 Read the project's domain glossary (`GLOSSARY.md`) and any ADRs in the area you're touching first.
 
-Then dispatch a Cursor Task subagent to walk the codebase (see HARNESS.md beside the engineering skill). Don't follow rigid heuristics; explore organically and note where you experience friction:
+Then dispatch a Cursor Task subagent to walk the codebase (see .cursor/skills/engineering/HARNESS.md). Don't follow rigid heuristics; explore organically and note where you experience friction:
 
 - Where does understanding one concept require bouncing between many small modules?
 - Where are modules **shallow**, with an interface nearly as complex as the implementation?
