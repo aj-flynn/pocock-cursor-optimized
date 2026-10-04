@@ -1,6 +1,8 @@
 # Cursor port of Matt Pocock's skills
 
-These are [Matt Pocock's agent skills](https://github.com/mattpocock/skills) (v1.3.1, MIT), adapted so they run in Cursor. The upstream commit is pinned in [UPSTREAM.md](UPSTREAM.md). The Claude Code to Cursor map is [docs/harness.md](docs/harness.md).
+This repository adapts the skills from [mattpocock/skills](https://github.com/mattpocock/skills) (v1.3.1) so they run in Cursor. Matt Pocock wrote the upstream skills. He did not write the Cursor adaptations and does not maintain this repository. The upstream commit is pinned in [UPSTREAM.md](UPSTREAM.md). The Claude Code to Cursor map is [docs/harness.md](docs/harness.md).
+
+The original skill text stays under his MIT copyright notice, which the license requires us to keep. The adaptations are also MIT and are not attributed to him. See [LICENSE](LICENSE).
 
 Opening this repo loads the skills from `.cursor/skills/`. To use them in another project, copy them in:
 
@@ -26,6 +28,10 @@ The grill gate applies only while the session phase is grilling. Triage, teachin
 The other skills stay available as `/grill-me`, `/tdd`, and the rest. Custom Mode is what keeps a loop alive across turns. [ask-matt](.cursor/skills/engineering/ask-matt/SKILL.md) is the router for which skill to use.
 
 Run `/setup-matt-pocock-skills` once in a project before the tracker-backed skills (triage, tickets, wayfinder). It writes an `## Agent skills` block to `AGENTS.md`, and to `CLAUDE.md` too when that file already exists.
+
+## License
+
+Upstream skill text: Copyright (c) 2026 Matt Pocock, MIT License. Cursor adaptations in this repository: MIT License, not attributed to him. Details are in [LICENSE](LICENSE).
 
 ## Checks
 

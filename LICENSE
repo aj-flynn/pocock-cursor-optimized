@@ -1,3 +1,20 @@
+This repository is a derivative of https://github.com/mattpocock/skills.
+
+The original skill text is Copyright (c) 2026 Matt Pocock. The MIT License
+requires that copyright notice, and the permission notice reproduced below,
+to be kept with substantial portions of that work. The notice is his, and it
+covers the original skill text. It is not a statement that he wrote the
+Cursor adaptations or that he holds copyright in them.
+
+Matt Pocock does not maintain this repository. Skill names that include his
+name are the upstream command names, kept so the commands still match.
+
+The Cursor adaptations are offered under the same MIT permission notice and
+disclaimer. That offer is not from Matt Pocock. No copyright holder is named
+for the adaptations in this file.
+
+The notice below is the upstream MIT License, kept intact.
+
 MIT License
 
 Copyright (c) 2026 Matt Pocock
