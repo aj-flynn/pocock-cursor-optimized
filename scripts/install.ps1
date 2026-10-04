@@ -1,13 +1,17 @@
 # Copy this repo's Cursor skills and the engineering-session rule into another project.
-# Run from PowerShell: .\scripts\install.ps1 C:\path\to\your\project
+param(
+  [Parameter(Mandatory = $true, Position = 0)]
+  [string]$Path
+)
+
 $ErrorActionPreference = 'Stop'
 
 function Write-Err([string]$Message) {
   [Console]::Error.WriteLine($Message)
 }
 
-if ($args.Count -ne 1 -or [string]::IsNullOrWhiteSpace([string]$args[0])) {
-  Write-Err "Usage: .\scripts\install.ps1 <project>"
+if ([string]::IsNullOrWhiteSpace($Path)) {
+  Write-Err "Usage: .\scripts\install.ps1 -Path <project>"
   Write-Err "Copy these skills into <project>\.cursor\skills and the engineering-session rule into <project>\.cursor\rules."
   exit 2
 }
@@ -37,7 +41,7 @@ function Resolve-Directory([string]$Path) {
 }
 
 $sourceRoot = Resolve-Directory (Join-Path $PSScriptRoot '..')
-$target = Resolve-Directory $args[0]
+$target = Resolve-Directory $Path
 $separator = [System.IO.Path]::DirectorySeparatorChar
 $sourceRoot = $sourceRoot.Replace('/', $separator).Replace('\', $separator).TrimEnd($separator)
 $target = $target.Replace('/', $separator).Replace('\', $separator).TrimEnd($separator)

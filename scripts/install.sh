@@ -5,7 +5,7 @@ set -euo pipefail
 
 usage() {
   echo "Usage: scripts/install.sh <project>" >&2
-  echo "Windows PowerShell: .\\scripts\\install.ps1 <project>" >&2
+  echo "Windows PowerShell: .\\scripts\\install.ps1 -Path <project>" >&2
   echo "Copy these skills into <project>/.cursor/skills and the engineering-session rule into <project>/.cursor/rules." >&2
   exit 2
 }
