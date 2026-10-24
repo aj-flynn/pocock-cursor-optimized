@@ -1,3 +1,5 @@
+> Historical provenance only. Active skill copies and installers were retired; the current consolidated collection is in `~/.codex/skills`.
+
 # Upstream
 
 Vendored from [mattpocock/skills](https://github.com/mattpocock/skills).
